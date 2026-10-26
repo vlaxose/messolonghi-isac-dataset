@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Messolonghi ISAC Dataset</title>
+<meta name="description" content="Range-Doppler dataset for decentralized bilevel learning: labelled bistatic ISAC radar patches from 10 real mobile masts in Messolonghi, simulated by ray tracing.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono&display=swap">
+<style>
+body { margin:0 } img { max-width:100% } [hidden] { display:none !important }
+:root { --bg:#f5f6f8; --fg:#1b2130; --muted:#5b6476; --line:#d8dce4; --card:#ffffff; --code:#eaedf2; --accent:#2f6db3; --accent2:#d9822b; --plate:#ffffff }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#12151b; --fg:#e4e8ee; --muted:#98a1b3; --line:#2a303b; --card:#1a1e26; --code:#222833; --accent:#7fb0ea; --accent2:#f0a75e; --plate:#ffffff; color-scheme:dark } }
+:root[data-theme="dark"] { --bg:#12151b; --fg:#e4e8ee; --muted:#98a1b3; --line:#2a303b; --card:#1a1e26; --code:#222833; --accent:#7fb0ea; --accent2:#f0a75e; --plate:#ffffff; color-scheme:dark }
+body { background:var(--bg); color:var(--fg); font:17px/1.62 "Source Serif 4", Georgia, serif; padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px)); padding-block:28px 64px }
+main { max-width:760px; margin:0 auto; display:grid; gap:20px }
+h1, h2, h3, .label, table, .stats, figcaption { font-family:"IBM Plex Sans", system-ui, sans-serif }
+h1 { font-size:1.6rem; line-height:1.25; margin:0; text-wrap:balance }
+h2 { font-size:1.12rem; margin:22px 0 0; padding-top:14px; border-top:1px solid var(--line); text-wrap:balance }
+h3 { font-size:.98rem; margin:4px 0 0 }
+p, ul { margin:0; max-width:68ch }
+ul { padding-left:1.2em; display:grid; gap:6px }
+.label { font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent) }
+.lede { color:var(--muted) }
+code { font-family:"IBM Plex Mono", ui-monospace, monospace; background:var(--code); padding:1px 4px; border-radius:3px; font-size:.84em; overflow-wrap:anywhere }
+.stats { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px }
+.stat { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px 12px }
+.stat b { display:block; font-size:1.3rem; line-height:1.2 }
+.stat span { font-size:.8rem; color:var(--muted) }
+figure { margin:0; display:grid; gap:8px }
+figure img { display:block; width:100%; height:auto; background:var(--plate); border:1px solid var(--line); border-radius:8px; padding:6px; box-sizing:border-box }
+figcaption { font-size:.85rem; color:var(--muted); line-height:1.45 }
+.tw { overflow-x:auto; border:1px solid var(--line); border-radius:8px; background:var(--card) }
+table { border-collapse:collapse; font-size:.86rem; width:100% }
+th, td { border-bottom:1px solid var(--line); padding:6px 10px; text-align:left; vertical-align:top; white-space:nowrap }
+td.wrap { white-space:normal; min-width:16ch }
+tr:last-child td { border-bottom:0 }
+th { color:var(--muted); font-weight:600 }
+td.n { text-align:right; font-variant-numeric:tabular-nums }
+.east td:first-child { color:var(--accent2); font-weight:600 }
+.town td:first-child { color:var(--accent); font-weight:600 }
+.note { background:var(--card); border-left:3px solid var(--accent); border-radius:0 8px 8px 0; padding:10px 14px }
+</style>
+</head>
+<body>
+<main>
+
+<header style="display:grid;gap:8px">
+  <div class="label">ISAC digital twin · dataset v2 · 26 Oct 2026</div>
+  <h1>Range-Doppler dataset for decentralized bilevel learning over 10 real masts</h1>
+  <p class="lede">Ten licensed mobile masts in Messolonghi, each one a learning node. Every node keeps its own labelled radar patches (drone, hovering drone, bird, clutter) from bistatic ISAC sensing, simulated by ray tracing on a 3D model of the town.</p>
+</header>
+
+<div class="stats">
+  <div class="stat"><b>154,576</b><span>labelled 28×28 patches</span></div>
+  <div class="stat"><b>10 nodes</b><span>real masts, 2 clusters</span></div>
+  <div class="stat"><b>3.7k to 37k</b><span>samples per node</span></div>
+  <div class="stat"><b>~18 dB</b><span>median target echo</span></div>
+</div>
+
+<h2>What it is</h2>
+<p>The 10 nodes are the 10 licensed mobile masts of Messolonghi, Greece, at their real positions, from the public antenna registry. They form two geographic clusters ("caves"): the town (nodes 0 to 6) and the east (nodes 7 to 9). Inside a cave every ordered pair of masts is a bistatic sensing pair, 48 pairs in all.</p>
+<p>Each run has one target flying anywhere over the masts' area (4.6 km × 3.8 km). Every look (200 ms), each receiving node stores patches around its detections, plus one patch cued at the true target cell when the target's own echo there is at least 6 dB above the noise. The data is non-IID by geometry and hardware, not by an artificial split.</p>
+
+<figure>
+  <img src="map.png" alt="Map of the 10 masts with sector directions, marker size by sample count, and target positions in grey">
+  <figcaption>The 10 masts. Marker size grows with the node's sample count. Short lines are the three sector directions. Grey dots are target positions on looks with a cued patch. Node 0 stands 200 m outside the 3D scene, 3 km from the rest of its cave: an uninformative node, kept on purpose.</figcaption>
+</figure>
+
+<p>Five masts are documented in EEAE studies (height, sector azimuths, antenna gain and beamwidths, power per sector): nodes 2, 5, 6, 8 and 9. The other five use a generic sensing panel (18 dBi, 64° × 6.5°) in 3 sectors, at 20 m and 8 W.</p>
+
+<h2>Communication graphs</h2>
+<figure>
+  <img src="graphs.png" alt="Six candidate communication graphs over the 10 masts">
+  <figcaption>Six candidate graphs in <code>graphs.json</code>, all connected: caveman (2 caves, one bridge), ring, line, fully connected, 3 nearest neighbours, and Barabási-Albert (m = 2, seed 0).</figcaption>
+</figure>
+
+<h2>How the masts sense</h2>
+<ul>
+  <li>Simulator: Sionna RT 2.2 ray tracing, NR 3.5 GHz, 100 MHz carrier.</li>
+  <li>Every mast transmits its sensing reference signal all the time on its own tenth of the carrier (9.8 MHz). A pair integrates the whole 200 ms look: Doppler bin 5 Hz, delay bin 30.6 m.</li>
+  <li>Each mast has one steerable beam: a sector azimuth and one of 6 elevations (1° to 21°). In search it sweeps. When any pair of the cave detects the target, every mast of the cave points at the track estimate (true position of the previous look plus a 30 / 30 / 10 m error). Five looks without a detection and the cave searches again.</li>
+  <li>Receivers form all beams digitally. The best beam toward the target is recorded.</li>
+  <li>The zero-Doppler notch is the DC bin only, so a hovering drone is detectable once its drift reaches 1 Doppler bin.</li>
+  <li>Every look is also synthesised without clutter and noise, which gives the target's own echo at the cued cell (<code>tgt_snr_db</code>).</li>
+</ul>
+
+<h2>Classes</h2>
+<div class="tw"><table>
+<tr><th>y</th><th>class</th><th>model</th></tr>
+<tr><td>0</td><td>drone</td><td class="wrap">3GPP small UAV, 5-15 m/s, 30-150 m altitude, rotor micro-Doppler</td></tr>
+<tr><td>1</td><td>hover</td><td class="wrap">same drone holding station (drift 0.3-1 m/s), 30-120 m. Body 1-3 bins from zero Doppler (median 10 Hz), so the rotor spread is what tells it apart</td></tr>
+<tr><td>2</td><td>bird</td><td class="wrap">8-15 m/s, 20-120 m, RCS −30 to −16 dBsm, wings flapping ±40° at 3-8 Hz, no rotors</td></tr>
+<tr><td>3</td><td>clutter</td><td class="wrap">any detection not on the target, up to 3 per pair and look. Mostly isolated noise and residual-clutter peaks far from zero Doppler (median 6 kHz)</td></tr>
+</table></div>
+
+<figure>
+  <img src="patches.png" alt="Example patches: one drone, hover, bird and clutter patch, fine and coarse views">
+  <figcaption>One example per class from node 2, target patches picked near 20 dB echo. Top: the fine patch (28 delay bins × 28 Doppler bins of 5 Hz around the cell). Bottom: the coarse patch (the same delays × the whole ±14 kHz Doppler axis pooled to 28 bins), where the rotor and wing lines show.</figcaption>
+</figure>
+
+<figure>
+  <img src="echo.png" alt="Histogram of target echo strength per class">
+  <figcaption>Target echo at the cued cell, all nodes. The 6 dB gate sets the floor. p10 / median / p90: drone 8.1 / 17.4 / 35.4 dB, hover 8.0 / 18.4 / 37.7 dB, bird 8.2 / 17.8 / 34.2 dB.</figcaption>
+</figure>
+
+<h2>Size and the per-node picture</h2>
+<div class="tw"><table>
+<tr><td>samples</td><td class="n">154,576</td></tr>
+<tr><td>drone / hover / bird / clutter</td><td class="n">62,646 / 51,420 / 26,429 / 14,081</td></tr>
+<tr><td>cued target patches (echo ≥ 6 dB)</td><td class="n">81,344</td></tr>
+<tr><td>detections (target / clutter)</td><td class="n">59,151 / 14,081</td></tr>
+<tr><td>train / val / test (108 / 36 / 36 runs)</td><td class="n">95,505 / 31,035 / 28,036</td></tr>
+<tr><td>runs</td><td class="n">180 (60 per target class), 40 looks each</td></tr>
+</table></div>
+
+<figure>
+  <img src="per_node.png" alt="Per-node sample counts by class, and per-node median target echo">
+  <figcaption>Left: samples per node by class. Right: median target echo per node (blue town, orange east). The class mix is similar everywhere, so the heterogeneity is in size, signal strength and clutter share.</figcaption>
+</figure>
+
+<div class="tw"><table>
+<tr><th>node</th><th>cave</th><th>samples</th><th>drone / hover / bird / clutter %</th><th>cued</th><th>median echo</th></tr>
+<tr class="town"><td>0</td><td>town</td><td class="n">16,385</td><td>47 / 33 / 13 / 7</td><td class="n">10,341</td><td class="n">14.0 dB</td></tr>
+<tr class="town"><td>1</td><td>town</td><td class="n">20,833</td><td>40 / 32 / 20 / 8</td><td class="n">10,849</td><td class="n">19.5 dB</td></tr>
+<tr class="town"><td>2</td><td>town</td><td class="n">37,326</td><td>40 / 34 / 17 / 10</td><td class="n">17,387</td><td class="n">22.3 dB</td></tr>
+<tr class="town"><td>3</td><td>town</td><td class="n">15,479</td><td>38 / 34 / 19 / 9</td><td class="n">7,584</td><td class="n">17.9 dB</td></tr>
+<tr class="town"><td>4</td><td>town</td><td class="n">13,807</td><td>41 / 32 / 21 / 7</td><td class="n">7,724</td><td class="n">16.5 dB</td></tr>
+<tr class="town"><td>5</td><td>town</td><td class="n">12,552</td><td>42 / 31 / 19 / 7</td><td class="n">7,334</td><td class="n">15.0 dB</td></tr>
+<tr class="town"><td>6</td><td>town</td><td class="n">24,902</td><td>37 / 35 / 16 / 11</td><td class="n">11,713</td><td class="n">20.4 dB</td></tr>
+<tr class="east"><td>7</td><td>east</td><td class="n">5,395</td><td>41 / 37 / 11 / 11</td><td class="n">3,464</td><td class="n">14.0 dB</td></tr>
+<tr class="east"><td>8</td><td>east</td><td class="n">3,688</td><td>43 / 29 / 6 / 22</td><td class="n">2,294</td><td class="n">12.9 dB</td></tr>
+<tr class="east"><td>9</td><td>east</td><td class="n">4,209</td><td>44 / 34 / 13 / 8</td><td class="n">2,654</td><td class="n">14.7 dB</td></tr>
+</table></div>
+
+<h2>Files (folder <code>K10/</code>)</h2>
+<ul>
+  <li><code>nodes/nodeXX.npz</code>, one per receiving node (111 MB in all):
+    <code>fine</code> and <code>coarse</code> uint8 [n, 28, 28], pixel to dB is <code>dB = v/4 − 10</code> (above the median noise, −10 to 53.75).
+    Also <code>y</code> [n], <code>split</code> [n] (train / val / test), <code>meta</code> float [n, 23] and <code>meta_names</code>.</li>
+  <li><code>graphs.json</code>: undirected edge lists of the six graphs above. Drawn in <code>graphs_K10.png</code>.</li>
+  <li><code>nodes.json</code>: position, cave, height, power, sector azimuths, antenna gain and beamwidths, documented flag, beam codebook and waveform parameters.</li>
+  <li><code>summary.json</code>: samples per node and class.</li>
+</ul>
+
+<h3>Meta columns</h3>
+<p><code>run, look, t_s, tx, rx, label, cued, target_detected, delay_bin, doppler_bin, doppler_hz, snr_db, bistatic_range_m, rx_target_range_m, tgt_x, tgt_y, tgt_z, tgt_snr_db, tracked, tx_sector, tx_el_deg, rx_sector, rx_el_deg</code></p>
+<p><code>snr_db</code> is the patch centre over the noise, whatever is there. <code>tgt_snr_db</code> is the target's own echo at the cued cell (−100 for clutter rows). <code>tracked</code> means the transmitter's cave was in track mode.</p>
+
+<h2>Points to note</h2>
+<ul>
+  <li><b>Split is by run</b> (run mod 5 = 4 test, = 3 val, else train), so no look of a trajectory leaks across splits. Runs are 8 s tracks, so consecutive looks are strongly correlated.</li>
+  <li><b>cued = 1</b> marks the patch at the true target cell. A detected target patch and the cued patch of the same look are near duplicates. For a detection-driven task use <code>cued == 0</code> only (25,980 / 22,063 / 11,108 target patches plus 14,081 clutter). For one target patch per pair and look use <code>cued == 1</code> plus the clutter rows.</li>
+  <li><b>Subsets by echo</b> (drone / hover / bird cued patches): ≥ 10 dB 29,600 / 23,866 / 12,587. ≥ 20 dB 14,936 / 13,059 / 6,605.</li>
+  <li><b>Birds give fewer samples</b> (median 172 per run against 893 for drones and 635 for hovers), since their echo is 15 to 30 dB weaker. Class weights or resampling are advised.</li>
+  <li>The detector fired on 64% of cued drone and bird patches and 52% of hover ones. Caves were in track mode for 94% of the samples.</li>
+  <li>For a label-skewed split on top of the geometric one, subsample per node.</li>
+</ul>
+
+<p class="note">Rotors and wings are point-scatterer models. The data suits an algorithm paper, not a claim about real-world classification accuracy.</p>
+
+</main>
+
+</body>
+</html>
