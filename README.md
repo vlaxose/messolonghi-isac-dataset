@@ -2,7 +2,7 @@
 
 **Range-Doppler dataset for decentralized and federated learning over 10 real masts**
 
-ISAC digital twin · dataset v2 · 26 Oct 2026
+ISAC digital twin · 26 Oct 2026
 
 Ten licensed mobile masts in Messolonghi, each one a learning node. Every node keeps its own labelled radar patches (drone, hovering drone, bird, clutter) from bistatic ISAC sensing, simulated by ray tracing on a 3D model of the town.
 
@@ -16,9 +16,9 @@ The 10 nodes are the 10 licensed mobile masts of Messolonghi, Greece, at their r
 
 Each run has one target flying anywhere over the masts' area (4.6 km × 3.8 km). Every look (200 ms), each receiving node stores patches around its detections, plus one patch cued at the true target cell when the target's own echo there is at least 6 dB above the noise. The data is non-IID by geometry and hardware, not by an artificial split.
 
-![Map of the 10 masts with sector directions, marker size by sample count, and target positions in grey](map.png)
+![Map of Messolonghi with the 10 masts in two clusters, lines between the masts that sense together, and the area where targets fly](map.png)
 
-*The 10 masts. Marker size grows with the node's sample count. Short lines are the three sector directions. Grey dots are target positions on looks with a cued patch. Node 0 stands 200 m outside the 3D scene, 3 km from the rest of its cave: an uninformative node, kept on purpose.*
+*The 10 masts over Messolonghi. Blue: the town cluster (nodes 0 to 6). Orange: the east cluster (nodes 7 to 9). A line joins two masts that sense together: each one receives the other's signal reflected by the target. Targets fly inside the dashed box. Node 0 stands at the edge of the 3D model, 3 km from the rest of its cluster: an uninformative node, kept on purpose.*
 
 Five masts are documented in EEAE studies (height, sector azimuths, antenna gain and beamwidths, power per sector): nodes 2, 5, 6, 8 and 9. The other five use a generic sensing panel (18 dBi, 64° × 6.5°) in 3 sectors, at 20 m and 8 W.
 
