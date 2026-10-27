@@ -18,7 +18,7 @@ Each run has one target flying anywhere over the masts' area (4.6 km × 3.8 km).
 
 ![Map of Messolonghi with the 10 masts in two clusters, lines between the masts that sense together, and the area where targets fly](map.png)
 
-*The 10 masts over Messolonghi. Blue: the town cluster (nodes 0 to 6). Orange: the east cluster (nodes 7 to 9). A line joins two masts that sense together: each one receives the other's signal reflected by the target. Targets fly inside the dashed box. Node 0 stands at the edge of the 3D model, 3 km from the rest of its cluster: an uninformative node, kept on purpose. Map data © OpenStreetMap contributors (ODbL), terrain SRTM.*
+*The 10 masts over Messolonghi. Blue: the town cluster (nodes 0 to 6). Orange: the east cluster (nodes 7 to 9). A line joins two masts that sense together: each one receives the other's signal reflected by the target. Targets fly inside the dashed box. Masts of different clusters do not sense together. The communication graphs below link the clusters for learning. Node 0 stands at the edge of the 3D model, 3 km from the rest of its cluster: an uninformative node, kept on purpose. Map data © OpenStreetMap contributors (ODbL), terrain SRTM.*
 
 Five masts have a recent public licence study (radio-emission study, 2023 to 2025) that lists their 3.5 GHz antennas: height, sector azimuths, gain, beamwidths and power per sector. These are nodes 2, 5, 6, 8 and 9. For the other five the latest documents are older 3G studies (2013 to 2018) without 3.5 GHz antennas, a declaration without an antenna table, or none at all, so they use a generic sensing panel (18 dBi, 64° × 6.5°) in 3 sectors, at 20 m and 8 W.
 
