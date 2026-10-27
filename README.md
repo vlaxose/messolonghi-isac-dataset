@@ -30,12 +30,17 @@ Five masts have a recent public licence study (radio-emission study, 2023 to 202
 
 ## How the masts sense
 
-- Simulator: Sionna RT 2.2 ray tracing, NR 3.5 GHz, 100 MHz carrier.
-- Every mast transmits its sensing reference signal all the time on its own tenth of the carrier (9.8 MHz). A pair integrates the whole 200 ms look: Doppler bin 5 Hz, delay bin 30.6 m.
-- Each mast has one steerable beam: a sector azimuth and one of 6 elevations (1° to 21°). In search it sweeps. When any pair of the cave detects the target, every mast of the cave points at the track estimate (true position of the previous look plus a 30 / 30 / 10 m error). Five looks without a detection and the cave searches again.
-- Receivers form all beams digitally. The best beam toward the target is recorded.
-- The zero-Doppler notch is the DC bin only, so a hovering drone is detectable once its drift reaches 1 Doppler bin.
-- Every look is also synthesised without clutter and noise, which gives the target's own echo at the cued cell (`tgt_snr_db`).
+![One sensing pair: mast A transmits, the drone reflects, mast B receives, and the range-Doppler map mast B builds](sensing.png)
+
+*One sensing pair. Mast B receives the direct signal from mast A, reflections off buildings and ground, and the echo off the drone. The echo arrives later than the direct signal, which gives its range, and its frequency is shifted by the drone's motion, which gives its speed. Over one look mast B builds a range-Doppler map. What does not move is removed, so the drone stands out, and a patch is cut around it.*
+
+1. **Every mast transmits.** Each mast sends a 5G signal at 3.5 GHz on its own tenth of the 100 MHz band (9.8 MHz), so the ten signals do not overlap.
+2. **The other masts of the cluster receive.** Each ordered pair of masts in a cluster, one transmitting and one receiving, works as a radar: 48 pairs in all.
+3. **One look lasts 200 ms.** Over a look the receiver measures the echo's delay, in range steps of 30.6 m, and its Doppler shift, in steps of 5 Hz (the echo path changing by about 0.4 m every second).
+4. **What does not move is removed.** The direct signal, buildings and ground have no Doppler shift and are cancelled. A hovering drone still shows once its drift reaches one Doppler step, and its rotors add lines on both sides of it.
+5. **A detector marks what stands out.** A cell is a detection when it is clearly above its neighbours (CFAR) and above the usual clutter level at that cell (clutter map). The receiving node stores a 28 × 28 patch around each detection, plus one patch at the target's true cell when its echo there is at least 6 dB above the noise (the cued patch).
+6. **Beams search, then track.** Each mast has one steerable transmit beam: one of its 3 sectors and one of 6 elevations from 1° to 21°. Without a target the beam sweeps. Once any pair of a cluster detects the target, all masts of that cluster point at it (with a 30 / 30 / 10 m position error), and they search again after 5 looks without a detection. Receivers form all their beams digitally and keep the best one toward the target.
+7. **Simulator.** Sionna RT 2.2 ray tracing on a 3D model of the town. Every look is also computed without clutter and noise, which gives the target's own echo strength (`tgt_snr_db`).
 
 ## Classes
 
@@ -43,7 +48,7 @@ Five masts have a recent public licence study (radio-emission study, 2023 to 202
 |---|---|---|
 | 0 | drone | 3GPP small UAV, 5-15 m/s, 30-150 m altitude, rotor micro-Doppler |
 | 1 | hover | same drone holding station (drift 0.3-1 m/s), 30-120 m. Body 1-3 bins from zero Doppler (median 10 Hz), so the rotor spread is what tells it apart |
-| 2 | bird | 8-15 m/s, 20-120 m, RCS −30 to −16 dBsm, wings flapping ±40° at 3-8 Hz, no rotors |
+| 2 | bird | 8-15 m/s, 20-120 m, RCS −30 to −16 dBsm, wings flapping ±40° at 3-8 Hz |
 | 3 | clutter | any detection not on the target, up to 3 per pair and look. Mostly isolated noise and residual-clutter peaks far from zero Doppler (median 6 kHz) |
 
 ![Example patches: one drone, hover, bird and clutter patch, fine and coarse views](patches.png)
