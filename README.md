@@ -99,14 +99,3 @@ Five masts have a recent public licence study (radio-emission study, 2023 to 202
 `run, look, t_s, tx, rx, label, cued, target_detected, delay_bin, doppler_bin, doppler_hz, snr_db, bistatic_range_m, rx_target_range_m, tgt_x, tgt_y, tgt_z, tgt_snr_db, tracked, tx_sector, tx_el_deg, rx_sector, rx_el_deg`
 
 `snr_db` is the patch centre over the noise, whatever is there. `tgt_snr_db` is the target's own echo at the cued cell (−100 for clutter rows). `tracked` means the transmitter's cave was in track mode.
-
-## Points to note
-
-- **Split is by run** (run mod 5 = 4 test, = 3 val, else train), so no look of a trajectory leaks across splits. Runs are 8 s tracks, so consecutive looks are strongly correlated.
-- **cued = 1** marks the patch at the true target cell. A detected target patch and the cued patch of the same look are near duplicates. For a detection-driven task use `cued == 0` only (25,980 / 22,063 / 11,108 target patches plus 14,081 clutter). For one target patch per pair and look use `cued == 1` plus the clutter rows.
-- **Subsets by echo** (drone / hover / bird cued patches): ≥ 10 dB 29,600 / 23,866 / 12,587. ≥ 20 dB 14,936 / 13,059 / 6,605.
-- **Birds give fewer samples** (median 172 per run against 893 for drones and 635 for hovers), since their echo is 15 to 30 dB weaker. Class weights or resampling are advised.
-- The detector fired on 64% of cued drone and bird patches and 52% of hover ones. Caves were in track mode for 94% of the samples.
-- For a label-skewed split on top of the geometric one, subsample per node.
-
-> Rotors and wings are point-scatterer models. The data suits an algorithm paper, not a claim about real-world classification accuracy.
